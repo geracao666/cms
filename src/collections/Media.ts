@@ -2,15 +2,41 @@ import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
-  access: {
-    read: () => true,
-  },
   fields: [
     {
-      name: 'alt',
+      name: 'prefix',
       type: 'text',
-      required: true,
+      admin: {
+        readOnly: true,
+      },
+    },
+    {
+      name: 'type',
+      type: 'select',
+      admin: {
+        readOnly: true,
+      },
+      options: [
+        {
+          label: 'Foto',
+          value: 'artist_photo',
+        },
+        {
+          label: 'Capa',
+          value: 'release_artwork',
+        },
+      ],
     },
   ],
-  upload: true,
+  upload: {
+    mimeTypes: ['image/*'],
+    formatOptions: {
+      format: 'jpeg',
+    },
+    resizeOptions: {
+      fit: 'cover',
+      width: 400,
+      height: 400,
+    },
+  },
 }
