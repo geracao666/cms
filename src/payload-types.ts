@@ -14,6 +14,7 @@ export interface Config {
     users: User;
     media: Media;
     artists: Artist;
+    tags: Tag;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -23,6 +24,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     artists: ArtistsSelect<false> | ArtistsSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -105,8 +107,22 @@ export interface Artist {
   name?: string | null;
   origin?: string | null;
   photo?: (number | null) | Media;
+  tags?:
+    | {
+        relationTo: 'tags';
+        value: number | Tag;
+      }[]
+    | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: number;
+  name?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -126,6 +142,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'artists';
         value: number | Artist;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: number | Tag;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -211,8 +231,16 @@ export interface ArtistsSelect<T extends boolean = true> {
   name?: T;
   origin?: T;
   photo?: T;
+  tags?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  name?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
