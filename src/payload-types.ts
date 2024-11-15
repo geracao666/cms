@@ -144,6 +144,7 @@ export interface Release {
   artists?: (number | Artist)[] | null;
   year?: string | null;
   type: 'album' | 'compilation' | 'dvd' | 'ep' | 'live' | 'single' | 'split';
+  artwork?: (number | null) | Media;
   downloadUrl?: string | null;
   discs?:
     | {
@@ -286,6 +287,7 @@ export interface ReleasesSelect<T extends boolean = true> {
   artists?: T;
   year?: T;
   type?: T;
+  artwork?: T;
   downloadUrl?: T;
   discs?:
     | T

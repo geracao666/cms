@@ -63,6 +63,38 @@ export const Releases: CollectionConfig = {
       ],
     },
     {
+      name: 'artwork',
+      type: 'upload',
+      relationTo: 'media',
+      unique: true,
+      displayPreview: false,
+      admin: {
+        disableListColumn: true,
+      },
+      hooks: {
+        afterChange: [
+          async ({ value, previousValue, req: { payload } }) => {
+            if (previousValue) {
+              await payload.delete({
+                collection: 'media',
+                id: previousValue,
+              })
+            }
+
+            if (value) {
+              await payload.update({
+                collection: 'media',
+                id: value,
+                data: {
+                  type: 'release_artwork',
+                },
+              })
+            }
+          },
+        ],
+      },
+    },
+    {
       name: 'downloadUrl',
       type: 'text',
     },
