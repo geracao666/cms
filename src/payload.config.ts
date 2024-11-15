@@ -11,6 +11,7 @@ import { Media } from './collections/Media'
 import { githubStorage } from 'payload-storage-github'
 import { Artists } from './collections/Artists'
 import { Tags } from './collections/Tags'
+import { Releases } from './collections/Releases'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -22,7 +23,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Artists, Tags],
+  collections: [Users, Media, Artists, Tags, Releases],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

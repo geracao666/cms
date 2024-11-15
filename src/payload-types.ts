@@ -15,16 +15,22 @@ export interface Config {
     media: Media;
     artists: Artist;
     tags: Tag;
+    releases: Release;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    artists: {
+      releases: 'releases';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     artists: ArtistsSelect<false> | ArtistsSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
+    releases: ReleasesSelect<false> | ReleasesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -113,6 +119,10 @@ export interface Artist {
         value: number | Tag;
       }[]
     | null;
+  releases?: {
+    docs?: (number | Release)[] | null;
+    hasNextPage?: boolean | null;
+  } | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -123,6 +133,26 @@ export interface Artist {
 export interface Tag {
   id: number;
   name?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "releases".
+ */
+export interface Release {
+  id: number;
+  name: string;
+  artists?: (number | Artist)[] | null;
+  year?: string | null;
+  type: 'album' | 'compilation' | 'dvd' | 'ep' | 'live' | 'single' | 'split';
+  downloadUrl?: string | null;
+  discs?:
+    | {
+        tracks: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -146,6 +176,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tags';
         value: number | Tag;
+      } | null)
+    | ({
+        relationTo: 'releases';
+        value: number | Release;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -232,6 +266,7 @@ export interface ArtistsSelect<T extends boolean = true> {
   origin?: T;
   photo?: T;
   tags?: T;
+  releases?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -241,6 +276,25 @@ export interface ArtistsSelect<T extends boolean = true> {
  */
 export interface TagsSelect<T extends boolean = true> {
   name?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "releases_select".
+ */
+export interface ReleasesSelect<T extends boolean = true> {
+  name?: T;
+  artists?: T;
+  year?: T;
+  type?: T;
+  downloadUrl?: T;
+  discs?:
+    | T
+    | {
+        tracks?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

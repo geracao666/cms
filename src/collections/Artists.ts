@@ -53,5 +53,15 @@ export const Artists: CollectionConfig = {
       relationTo: ['tags'],
       hasMany: true,
     },
+    {
+      name: 'releases',
+      type: 'join',
+      collection: 'releases',
+      on: 'artists',
+      admin: {
+        allowCreate: false,
+        disableListColumn: true,
+      },
+    },
   ],
 }
