@@ -27,7 +27,7 @@ export const Artists: CollectionConfig = {
       hooks: {
         afterChange: [
           async ({ value, previousValue, req: { payload } }) => {
-            if (previousValue) {
+            if (previousValue && previousValue !== value) {
               await payload.delete({
                 collection: 'media',
                 id: previousValue,
