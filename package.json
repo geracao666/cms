@@ -15,15 +15,15 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start"
   },
   "dependencies": {
-    "@payloadcms/db-sqlite": "beta",
-    "@payloadcms/next": "beta",
-    "@payloadcms/payload-cloud": "beta",
-    "@payloadcms/richtext-lexical": "beta",
+    "@payloadcms/db-sqlite": "3.0.0-beta.134",
+    "@payloadcms/next": "3.0.0-beta.134",
+    "@payloadcms/payload-cloud": "3.0.0-beta.134",
+    "@payloadcms/richtext-lexical": "3.0.0-beta.134",
     "cross-env": "^7.0.3",
     "graphql": "^16.8.1",
     "next": "15.0.0",
-    "payload": "beta",
-    "payload-storage-github": "^0.1.17",
+    "payload": "3.0.0-beta.134",
+    "payload-storage-github": "^0.1.19",
     "react": "19.0.0-rc-65a56d0e-20241020",
     "react-dom": "19.0.0-rc-65a56d0e-20241020",
     "sharp": "0.32.6"
