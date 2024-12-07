@@ -34,15 +34,24 @@ export const renameReleaseArtwork = async ({
   const artwork = release.artwork as Media
 
   // artwork is already in the desired directory
-  // or the artist doesn't have a slug
   if (!artwork.url || (artwork.prefix && artwork.prefix !== DEFAULT_PREFIX)) {
     return null
   }
 
-  return await renameMedia({
+  const renamedArtwork = await renameMedia({
     media: artwork,
     prefix: getArtistMediaDir(artist.slug),
     filename: `${artist.slug}-${createSlug(release.name)}-artwork.jpg`,
     payload,
   })
+
+  await payload.update({
+    collection: 'releases',
+    id: release.id,
+    data: {
+      artwork: renamedArtwork.id,
+    },
+  })
+
+  return renamedArtwork
 }

@@ -45,7 +45,7 @@ export const Releases: CollectionConfig = {
         afterRead: [
           ({ value }) => {
             const year = new Date(value).getUTCFullYear()
-            return new Date(year, 0, 1)
+            return new Date(year, 0, 1).toISOString()
           },
         ],
       },

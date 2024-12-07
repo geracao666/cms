@@ -31,7 +31,7 @@ export const renameArtistPhoto = async ({
   })
 
   // photo doesn't belong to an artist anymore
-  if (!artist || !artist.slug) {
+  if (!artist) {
     return null
   }
 
@@ -42,10 +42,20 @@ export const renameArtistPhoto = async ({
     return null
   }
 
-  return await renameMedia({
+  const renamedPhoto = await renameMedia({
     media: photo,
     prefix: getArtistMediaDir(artist.slug),
     filename: `${artist.slug}-photo.jpg`,
     payload,
   })
+
+  await payload.update({
+    collection: 'artists',
+    id: artist.id,
+    data: {
+      photo: renamedPhoto.id,
+    },
+  })
+
+  return renamedPhoto
 }
