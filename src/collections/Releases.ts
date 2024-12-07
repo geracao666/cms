@@ -1,3 +1,4 @@
+import { moveReleaseArtwork } from '@/tasks/moveReleaseArtwork.task'
 import { CollectionConfig } from 'payload'
 
 export const Releases: CollectionConfig = {
@@ -15,6 +16,7 @@ export const Releases: CollectionConfig = {
       name: 'artists',
       type: 'relationship',
       relationTo: 'artists',
+      required: true,
       hasMany: true,
       admin: {
         allowCreate: false,
@@ -87,6 +89,13 @@ export const Releases: CollectionConfig = {
                 id: value,
                 data: {
                   type: 'release_artwork',
+                },
+              })
+
+              await payload.jobs.queue({
+                task: moveReleaseArtwork.slug,
+                input: {
+                  mediaId: value,
                 },
               })
             }

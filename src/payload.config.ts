@@ -13,6 +13,7 @@ import { Artists } from './collections/Artists'
 import { Tags } from './collections/Tags'
 import { Releases } from './collections/Releases'
 import { moveArtistPhoto } from './tasks/moveArtistPhoto.task'
+import { moveReleaseArtwork } from './tasks/moveReleaseArtwork.task'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -38,7 +39,7 @@ export default buildConfig({
   }),
 
   jobs: {
-    tasks: [moveArtistPhoto],
+    tasks: [moveArtistPhoto, moveReleaseArtwork],
   },
 
   sharp,

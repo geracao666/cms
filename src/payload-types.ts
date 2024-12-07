@@ -49,6 +49,7 @@ export interface Config {
   jobs: {
     tasks: {
       moveArtistPhoto: TaskMoveArtistPhoto;
+      moveReleaseArtwork: TaskMoveReleaseArtwork;
       inline: {
         input: unknown;
         output: unknown;
@@ -150,7 +151,7 @@ export interface Tag {
 export interface Release {
   id: number;
   name: string;
-  artists?: (number | Artist)[] | null;
+  artists: (number | Artist)[];
   year?: string | null;
   type: 'album' | 'compilation' | 'dvd' | 'ep' | 'live' | 'single' | 'split';
   artwork?: (number | null) | Media;
@@ -204,7 +205,7 @@ export interface PayloadJob {
     | {
         executedAt: string;
         completedAt: string;
-        taskSlug: 'inline' | 'moveArtistPhoto';
+        taskSlug: 'inline' | 'moveArtistPhoto' | 'moveReleaseArtwork';
         taskID: string;
         input?:
           | {
@@ -237,7 +238,7 @@ export interface PayloadJob {
         id?: string | null;
       }[]
     | null;
-  taskSlug?: ('inline' | 'moveArtistPhoto') | null;
+  taskSlug?: ('inline' | 'moveArtistPhoto' | 'moveReleaseArtwork') | null;
   queue?: string | null;
   waitUntil?: string | null;
   processing?: boolean | null;
@@ -460,6 +461,16 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "TaskMoveArtistPhoto".
  */
 export interface TaskMoveArtistPhoto {
+  input: {
+    mediaId: number;
+  };
+  output?: unknown;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskMoveReleaseArtwork".
+ */
+export interface TaskMoveReleaseArtwork {
   input: {
     mediaId: number;
   };
