@@ -1,3 +1,5 @@
+import { moveArtistPhoto } from '@/tasks/moveArtistPhoto.task'
+import createSlug from '@/utils/createSlug'
 import { CollectionConfig } from 'payload'
 
 export const Artists: CollectionConfig = {
@@ -10,6 +12,26 @@ export const Artists: CollectionConfig = {
       name: 'name',
       type: 'text',
       unique: true,
+    },
+    {
+      name: 'slug',
+      type: 'text',
+      unique: true,
+      required: true,
+      admin: {
+        readOnly: true,
+      },
+      hooks: {
+        beforeValidate: [
+          ({ value, operation, siblingData }) => {
+            if (value && operation !== 'create') {
+              return createSlug(value)
+            }
+
+            return createSlug(siblingData.name)
+          },
+        ],
+      },
     },
     {
       name: 'origin',
@@ -40,6 +62,13 @@ export const Artists: CollectionConfig = {
                 id: value,
                 data: {
                   type: 'artist_photo',
+                },
+              })
+
+              await payload.jobs.queue({
+                task: moveArtistPhoto.slug,
+                input: {
+                  mediaId: value,
                 },
               })
             }

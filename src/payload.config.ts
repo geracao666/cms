@@ -2,7 +2,7 @@
 import { sqliteAdapter } from '@payloadcms/db-sqlite'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
-import { buildConfig } from 'payload'
+import { buildConfig, TaskConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
@@ -12,30 +12,38 @@ import { githubStorage } from 'payload-storage-github'
 import { Artists } from './collections/Artists'
 import { Tags } from './collections/Tags'
 import { Releases } from './collections/Releases'
+import { moveArtistPhoto } from './tasks/moveArtistPhoto.task'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  serverURL: process.env.SERVER_URL || '',
+  secret: process.env.PAYLOAD_SECRET || '',
+
   admin: {
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
     },
   },
+
   collections: [Users, Media, Artists, Tags, Releases],
-  editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
-  typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
-  },
+
   db: sqliteAdapter({
     client: {
       url: process.env.DATABASE_URI || '',
       authToken: process.env.DATABASE_AUTH_TOKEN || '',
     },
   }),
+
+  jobs: {
+    tasks: [moveArtistPhoto],
+  },
+
   sharp,
+  editor: lexicalEditor(),
+
   plugins: [
     githubStorage({
       collections: {
@@ -50,4 +58,8 @@ export default buildConfig({
       repo: process.env.GITHUB_CDN_REPOSITORY_NAME || '',
     }),
   ],
+
+  typescript: {
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
+  },
 })
